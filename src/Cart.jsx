@@ -469,7 +469,7 @@ function Cart() {
                       <p className="text-muted">Pay securely using UPI</p>
                       <div className="d-flex justify-content-center my-3">
                         <QRCode
-                          value={`upi://pay?pa=7205744485@ptaxis&pn=${customerName}&tn=Payment for order&am=${finalPrice.toFixed(
+                          value={`upi://pay?pa=7205744485@ptaxis&pn=Bite-Buddy &tn=Payment for order&am=${finalPrice.toFixed(
                             2
                           )}&cu=INR`}
                           size={220}
