@@ -170,10 +170,15 @@ function Home() {
         >
           <div className="carousel-inner">
             {[
-              "pizza.jpg", // Pizza
-              "burger.jpg", // Burger
-              "abc.jpg", // Pasta
-              "a.jpg", // Biryani
+
+              "/pizza.jpg", // Pizza
+
+              "/burger.jpg", // Burger
+
+              "/abc.jpg", // Pasta
+
+              "/a.jpg", // Biryani
+
             ].map((food, idx) => (
               <div
                 key={idx}
@@ -306,19 +311,31 @@ function Home() {
           <div className="carousel-inner">
             {[
               {
-                img: "rega.jpeg",
+
+                img: "/rega.jpeg",
+
                 text: "Amazing food quality and user-friendly app. Customer support is very helpful. I trust BiteBuddy for every order.",
+
                 name: "- PARV SINGH ⭐⭐⭐⭐⭐",
+
               },
               {
-                img: "likun.jpeg",
+
+                img: "/likun.jpeg",
+
                 text: "I love the variety of dishes. Payments are hassle-free, and the packaging is great. BiteBuddy never disappoints!",
+
                 name: "- LIKUN SAHOO ⭐⭐⭐⭐⭐",
+
               },
               {
-                img: "me.jpeg",
+
+                img: "/me.jpeg",
+
                 text: "BiteBuddy is my go-to app! The delivery is super fast and the food is always fresh. Highly recommended!",
+
                 name: "- SHUBHRANSHU DAS ⭐⭐⭐⭐⭐",
+
               },
             ].map((review, idx) => (
               <div
