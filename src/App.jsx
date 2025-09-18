@@ -27,17 +27,25 @@ function App() {
 
   const handleLogout = () => {
     dispatch(logout());
-    // Optionally clear localStorage loggedInUser
     localStorage.removeItem("loggedInUser");
   };
 
   return (
     <BrowserRouter>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark bg-black fixed-top shadow-sm">
+      <nav
+        className="navbar navbar-expand-lg fixed-top shadow-sm"
+        style={{
+          background: "linear-gradient(90deg, #0c0b0bff, #0a0a0aff)", // gradient color
+        }}
+      >
         <div className="container-fluid">
           {/* Brand */}
-          <Link to="/home" className="navbar-brand fw-bold fs-4 text-white">
+          <Link
+            to="/home"
+            className="navbar-brand fw-bold fs-4"
+            style={{ color: "#fff200" }} // Yellow highlight color
+          >
             🍴 Bite Buddy
           </Link>
 
@@ -112,7 +120,6 @@ function App() {
                   📦 Orders
                 </Link>
               </li>
-
               <li className="nav-item">
                 <Link to="/contactus" className="nav-link text-white">
                   📲 Contact Us
@@ -148,7 +155,6 @@ function App() {
       </nav>
 
       {/* Routes */}
-
       <Routes>
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<Home />} />
@@ -158,7 +164,6 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/search" element={<Search />} />
-
         <Route path="/contactus" element={<ContactUs />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="*" element={<NotFound />} />
