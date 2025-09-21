@@ -15,6 +15,50 @@ import Swal from "sweetalert2";
 import confetti from "canvas-confetti";
 import emailjs from "@emailjs/browser";
 
+// --- Custom CSS for the new design ---
+// You can put this in a separate CSS file and import it.
+// For this example, it's included here for simplicity.
+const customStyles = `
+  .cart-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  .cart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  .qr-card {
+    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .qr-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 70%);
+    transform: rotate(45deg);
+    animation: pulse 5s infinite;
+    z-index: 0;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1) rotate(45deg); opacity: 0.5; }
+    50% { transform: scale(1.2) rotate(45deg); opacity: 1; }
+    100% { transform: scale(1) rotate(45deg); opacity: 0.5; }
+  }
+  .qr-content {
+    position: relative;
+    z-index: 1;
+  }
+  .price-summary-card {
+    border-left: 5px solid #28a745;
+  }
+`;
+
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -106,6 +150,7 @@ function Cart() {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
       if (successSoundRef.current) successSoundRef.current.play();
+      Swal.fire("Success!", "Coupon applied successfully!", "success");
     } else {
       Swal.fire("Invalid Coupon", "Please enter a valid coupon code!", "error");
       if (errorSoundRef.current) errorSoundRef.current.play();
@@ -241,6 +286,9 @@ function Cart() {
 
   return (
     <div className="container-fluid" style={{ marginTop: "80px" }}>
+      {/* Add custom styles here */}
+      <style>{customStyles}</style>
+
       {/* 🔊 Hidden audio elements */}
       <audio ref={successSoundRef} src="/success.mp3" preload="auto" />
       <audio ref={errorSoundRef} src="/error.mp3" preload="auto" />
@@ -270,7 +318,7 @@ function Cart() {
               {cartItems.map((item) => (
                 <div
                   key={item.id}
-                  className="card mb-3 p-3 d-flex flex-row align-items-center shadow-sm border-0"
+                  className="card mb-3 p-3 d-flex flex-row align-items-center cart-card"
                   style={{ backgroundColor: "#f8f9fa" }}
                 >
                   <img
@@ -329,7 +377,7 @@ function Cart() {
             <div className="col-lg-4">
               {/* Customer Details */}
               <div
-                className="card p-4 mb-3 shadow-sm border-0"
+                className="card p-4 mb-3 cart-card"
                 style={{ backgroundColor: "#e9f7ef" }}
               >
                 <h5 className="fw-bold text-success">👤 Customer Details</h5>
@@ -358,7 +406,7 @@ function Cart() {
 
               {/* Discount Section */}
               <div
-                className="card p-4 mb-3 shadow-sm border-0"
+                className="card p-4 mb-3 cart-card"
                 style={{ backgroundColor: "#fff3cd" }}
               >
                 <h5 className="fw-bold text-warning">💸 Apply Discount</h5>
@@ -386,7 +434,7 @@ function Cart() {
 
               {/* Coupon Section */}
               <div
-                className="card p-4 mb-3 shadow-sm border-0"
+                className="card p-4 mb-3 cart-card"
                 style={{ backgroundColor: "#e8f0fe" }}
               >
                 <h5 className="fw-bold text-primary">🏷️ Apply Coupon</h5>
@@ -409,8 +457,7 @@ function Cart() {
 
               {/* Price Summary */}
               <div
-                className="card p-4 mb-3 shadow-sm bg-light border-0"
-                style={{ borderLeft: "5px solid #28a745" }}
+                className="card p-4 mb-3 cart-card price-summary-card bg-light"
               >
                 <h5 className="fw-bold text-dark">💰 Price Summary</h5>
                 <p>Total Price: ₹{totalPrice.toFixed(2)}</p>
@@ -437,74 +484,77 @@ function Cart() {
               </div>
 
               {/* Payment Method */}
-              <div className="card p-4 mb-3 shadow-sm border-0">
+              <div className="card p-4 mb-3 cart-card">
                 <h5 className="fw-bold text-dark">💳 Select Payment Method</h5>
-                <button
-                  className={`btn mx-2 fw-semibold ${
-                    paymentMethod === "qr" ? "btn-success" : "btn-outline-dark"
-                  }`}
-                  onClick={() => setPaymentMethod("qr")}
-                >
-                  QR Code
-                </button>
-                <button
-                  className={`btn mx-2 fw-semibold ${
-                    paymentMethod === "card" ? "btn-success" : "btn-outline-dark"
-                  }`}
-                  onClick={() => setPaymentMethod("card")}
-                >
-                  Card
-                </button>
+                <div className="d-flex justify-content-around">
+                  <button
+                    className={`btn fw-semibold ${
+                      paymentMethod === "qr" ? "btn-success" : "btn-outline-dark"
+                    }`}
+                    onClick={() => setPaymentMethod("qr")}
+                  >
+                    QR Code
+                  </button>
+                  <button
+                    className={`btn fw-semibold ${
+                      paymentMethod === "card" ? "btn-success" : "btn-outline-dark"
+                    }`}
+                    onClick={() => setPaymentMethod("card")}
+                  >
+                    Card
+                  </button>
+                </div>
               </div>
 
               {/* QR Code Payment */}
               {paymentMethod === "qr" && (
                 <div
-                  className="card p-4 mb-3 shadow-sm text-center border-0"
-                  style={{ backgroundColor: "#f1f8e9" }}
+                  className="card p-4 mb-3 text-center cart-card qr-card"
                 >
-                  {timeLeft > 0 ? (
-                    <>
-                      <h5 className="mb-3 fw-bold text-success">📲 Scan & Pay</h5>
-                      <p className="text-muted">Pay securely using UPI</p>
-                      <div className="d-flex justify-content-center my-3">
-                        <QRCode
-                          value={`upi://pay?pa=7205744485@ptaxis&pn=Bite-Buddy &tn=Payment for order&am=${finalPrice.toFixed(
-                            2
-                          )}&cu=INR`}
-                          size={220}
-                          level="H"
-                          includeMargin={true}
-                        />
+                  <div className="qr-content">
+                    {timeLeft > 0 ? (
+                      <>
+                        <h5 className="mb-3 fw-bold text-success">📲 Scan & Pay</h5>
+                        <p className="text-muted">Pay securely using UPI</p>
+                        <div className="d-flex justify-content-center my-3">
+                          <QRCode
+                            value={`upi://pay?pa=7205744485@ptaxis&pn=Bite-Buddy &tn=Payment for order&am=${finalPrice.toFixed(
+                              2
+                            )}&cu=INR`}
+                            size={220}
+                            level="H"
+                            includeMargin={true}
+                          />
+                        </div>
+                        <h5 className="text-dark">
+                          Amount:{" "}
+                          <span className="text-success fw-bold">
+                            ₹{finalPrice.toFixed(2)}
+                          </span>
+                        </h5>
+                        <p className="mt-2">
+                          UPI ID:{" "}
+                          <strong className="text-primary">
+                            7205744485@ptaxis
+                          </strong>
+                        </p>
+                        <div className="fw-bold text-danger mt-3">
+                          ⏳ Time Left: {formatTime(timeLeft)}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="alert alert-danger fw-bold">
+                        ❌ Request Timed Out! Please try again.
                       </div>
-                      <h5 className="text-dark">
-                        Amount:{" "}
-                        <span className="text-success fw-bold">
-                          ₹{finalPrice.toFixed(2)}
-                        </span>
-                      </h5>
-                      <p className="mt-2">
-                        UPI ID:{" "}
-                        <strong className="text-primary">
-                          7205744485@ptaxis
-                        </strong>
-                      </p>
-                      <div className="fw-bold text-danger mt-3">
-                        ⏳ Time Left: {formatTime(timeLeft)}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="alert alert-danger fw-bold">
-                      ❌ Request Timed Out! Please try again.
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               )}
 
               {/* Card Payment */}
               {paymentMethod === "card" && (
                 <div
-                  className="card p-4 mb-3 shadow-sm border-0"
+                  className="card p-4 mb-3 cart-card"
                   style={{ backgroundColor: "#fff0f6" }}
                 >
                   <h5 className="mb-3 fw-bold text-danger">
@@ -537,7 +587,7 @@ function Cart() {
 
               {/* Place Order */}
               <button
-                className="btn btn-success btn-lg w-100 fw-bold shadow-sm"
+                className="btn btn-success btn-lg w-100 fw-bold cart-card"
                 onClick={handlePlaceOrder}
               >
                 ✅ Place Your Order
