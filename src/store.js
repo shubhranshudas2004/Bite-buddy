@@ -122,7 +122,7 @@ const productSlice = createSlice({
     placeOrder: (state, action) => {
       if (state.cart.length > 0) {
         state.orders.push({
-          id: Date.now(),
+          id: action.payload.id,
           items: [...state.cart],
           date: new Date().toLocaleString(),
           discountedPrice: action.payload.discountedPrice,
